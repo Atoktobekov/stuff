@@ -6,6 +6,7 @@
 
 
 class ToyPhone {
+
 private:
     int batteryPower = 10;
     bool isWorking(){
@@ -16,6 +17,19 @@ public:
     float displaySize;
     float weight;
     std::string batteryType;
+
+    ToyPhone() {
+        weight = 0.0f;
+        displaySize = 0.0f;
+        color = "";
+        batteryType = "";
+
+        std::cout<<"Toy phone created!"<<std::endl;
+    };
+
+    ~ToyPhone() {
+        std::cout<<"Toy phone destroyed!"<<std::endl;
+    }
 
     void sing(){
         if(isWorking()){
@@ -44,35 +58,39 @@ public:
         std::cout<<"Battery type: " << batteryType<<std::endl;
     }
 
+
 };
 
 
 int main() {
     ToyPhone toyPhone;
 
-   // toyPhone.sing();
+    toyPhone.sing();
+    //toyPhone.changeBattery();
+    //toyPhone.sing();
 
     toyPhone.batteryType = "1.5V battery";
     toyPhone.color = "red";
     toyPhone.weight = 50;
     toyPhone.displaySize = 2.5f;
 
-  //  std::cout<<toyPhone.displaySize<<std::endl;
-    ToyPhone newOne;
+    ToyPhone second_phone;
 
-    newOne.displaySize = 3.3f;
-    newOne.batteryType = "9V Big battery";
-    newOne.weight = 87.7f;
-    newOne.color = "Yellow";
+    second_phone.displaySize = 3.3f;
+    second_phone.batteryType = "9V Big battery";
+    second_phone.weight = 87.7f;
+    second_phone.color = "Yellow";
     std::cout<<"-----------------------------"<<std::endl;
     toyPhone.printInfo();
 
     std::cout<<"-----------------------------"<<std::endl;
-    newOne.printInfo();
+    second_phone.printInfo();
 
-    newOne = toyPhone;
+    second_phone = toyPhone;
     std::cout<<"-----------------------------"<<std::endl;
-    newOne.printInfo();
+    second_phone.printInfo();
+
+
     return 0;
 }
 
