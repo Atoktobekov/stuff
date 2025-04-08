@@ -32,10 +32,6 @@ public class BankRepository {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("Loaded Banks: " + banksList.size());
-        for (Bank bank : banksList) {
-            System.out.println(bank.getName());
-        }
         return banksList;
     }
 }

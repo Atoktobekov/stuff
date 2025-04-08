@@ -9,7 +9,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.example.controller.MainController;
 import org.example.db.entity.Client;
-import org.example.db.entity.Bank;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -65,10 +64,10 @@ public class BankUI extends Application implements ViewInterface {
         transferPanel.getChildren().addAll(amountField, senderComboBox, recipientComboBox, transferButton);
 
         Button showBanksInfoButton = new Button("Show Banks Info");
-        showBanksInfoButton.setOnAction(event -> controller.showBanksInfo());
+        showBanksInfoButton.setOnAction(event -> controller.handleShowBankInfo());
 
         Button showClientsInfoButton = new Button("Show Clients Info");
-        showClientsInfoButton.setOnAction(event -> controller.showClientsInfo());
+        showClientsInfoButton.setOnAction(event -> controller.handleShowClientsInfo());
 
         VBox infoButtonsPanel = new VBox(10);
         infoButtonsPanel.setStyle("-fx-padding: 10;");
