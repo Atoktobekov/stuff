@@ -1,4 +1,4 @@
-firstName,secondName,dateOfBirth,inn,phoneNumber,bankAccount,balance
-John,Doe,1990-05-12,123456789,555-1234,ACC123456,1000.50
-Jane,Smith,1985-08-24,987654321,555-5678,ACC987654,2500.75
-Adi,Toktobekov,2004-08-04,773776779,555-5778,ACC567123,1500.00
+firstName,secondName,dateOfBirth,inn,phoneNumber,bankAccount,balance,bankName
+John,Doe,1990-05-12,123456789,555-1234,ACC123456,1000.50,"O! Bank"
+Jane,Smith,1985-08-24,987654321,555-5678,ACC987654,2500.75,"Mbank"
+Adi,Toktobekov,2004-08-04,773776779,555-5778,ACC567123,1500.00,"Optima"

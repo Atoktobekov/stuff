@@ -18,4 +18,5 @@ public class Client {
     private String phoneNumber;
     private String bankAccount;
     private BigDecimal balance;
+    private String bankName;  // новое поле для банка
 }
