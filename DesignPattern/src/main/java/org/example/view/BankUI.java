@@ -29,16 +29,6 @@ public class BankUI extends Application implements ViewInterface {
 
         controller = new MainController(this);
 
-        VBox bankInfoPanel = new VBox(10);
-        bankInfoPanel.setStyle("-fx-padding: 10;");
-        bankInfoPanel.getChildren().addAll(
-                new Label("Bank Info"),
-                new Label("Bank Name: O! Bank"),
-                new Label("BIC: 912456"),
-                new Label("Address: Bishkek, Frunze 451"),
-                new Label("Capital: 123456789.05")
-        );
-
         VBox clientListPanel = new VBox(10);
         clientListPanel.setStyle("-fx-padding: 10;");
         clientListPanel.getChildren().add(new Label("Client List"));
@@ -57,9 +47,9 @@ public class BankUI extends Application implements ViewInterface {
         senderComboBox = new ComboBox<>();
         recipientComboBox = new ComboBox<>();
 
-        // Добавляем клиентов в ComboBox
+
         for (Client client : controller.getClients()) {
-            String name = client.getFirstName() + " " + client.getSecondName() + ", " + client.getBankName();
+            String name = client.getFirstName() + " " + client.getSecondName() + " " + client.getBankName();
             senderComboBox.getItems().add(name);
             recipientComboBox.getItems().add(name);
         }
@@ -85,7 +75,7 @@ public class BankUI extends Application implements ViewInterface {
         infoButtonsPanel.getChildren().addAll(showBanksInfoButton, showClientsInfoButton);
 
         VBox root = new VBox(20);
-        root.getChildren().addAll(bankInfoPanel, clientListPanel, transferPanel, infoButtonsPanel);
+        root.getChildren().addAll( clientListPanel, transferPanel, infoButtonsPanel);
 
         Scene scene = new Scene(root, 800, 600);
         primaryStage.setScene(scene);
