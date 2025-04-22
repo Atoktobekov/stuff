@@ -1,36 +1,41 @@
 package org.example.controller;
 
+import java.util.Map;
+
+import lombok.Getter;
 import org.example.db.entity.Client;
 import org.example.db.repo.ClientRepository;
-import org.example.service.MoneyTransferService;
+import org.example.service.*;
 import org.example.view.ViewInterface;
-import org.example.service.ClientService;
-import org.example.service.InfoService;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 public class MainController {
 
+    @Getter
     private final List<Client> clients;
     private final ClientRepository clientRepository;
     private final ViewInterface view;
-    private final ClientService clientService;
     private final InfoService infoService;
+    private final Map<String, ClientFinderStrategy> strategyMap;
 
     public MainController(ViewInterface view) {
         this.view = view;
         this.clientRepository = new ClientRepository(); // если он нестатичный
         this.clients = clientRepository.readClientsList();
-        this.clientService = new ClientService(clients);
         this.infoService = new InfoService(clients);
+        // Регистрация стратегий
+        strategyMap = Map.of(
+                "By Name", new ByFullNameFinder(),
+                "By Phone", new ByPhoneFinder(),
+                "By Inn", new ByInnFinder()
+        );
+
     }
 
-    public List<Client> getClients() {
-        return clients;
-    }
-
-    public void handleTransfer(String senderName, String recipientName, String amountText) {
+    public void handleTransfer(String method, String senderId, String recipientId, String amountText)
+    {
         try {
             BigDecimal amount = new BigDecimal(amountText);
             if (amount.compareTo(BigDecimal.ZERO) <= 0) {
@@ -38,19 +43,19 @@ public class MainController {
                 return;
             }
 
-            Client sender = clientService.findByFullName(senderName);
-            Client recipient = clientService.findByFullName(recipientName);
-            if (sender == null || recipient == null) {
-                view.showError("Sender or recipient not found!");
+            ClientFinderStrategy strategy = strategyMap.get(method);
+            if (strategy == null) {
+                view.showError("Unknown transfer method: " + method);
                 return;
             }
 
-            String senderBank = sender.getBankName();
-            String recipientBank = recipient.getBankName();
+            MoneyTransferUseCase useCase = new MoneyTransferUseCase(clients, strategy);
+            useCase.transfer(senderId, recipientId, amount);
 
-            MoneyTransferService.sendMoney(amount, sender, recipient);
+            Client sender = strategy.findClient(clients, senderId);
+            Client recipient = strategy.findClient(clients, recipientId);
 
-            view.showTransferInfo(senderName, recipientName, amount, senderBank, recipientBank);
+            view.showTransferInfo(senderId, recipientId, amount, sender.getBankName(), recipient.getBankName());
             view.refreshClientList(clients);
 
         } catch (NumberFormatException e) {

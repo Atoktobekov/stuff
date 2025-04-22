@@ -19,6 +19,7 @@ public class BankUI extends Application implements ViewInterface {
     private ListView<String> clientListView;
     private ComboBox<String> senderComboBox;
     private ComboBox<String> recipientComboBox;
+    private ComboBox<String> methodComboBox;
     private TextField amountField;
     private MainController controller;
 
@@ -43,25 +44,28 @@ public class BankUI extends Application implements ViewInterface {
         amountField = new TextField();
         amountField.setPromptText("Amount to transfer");
 
+        methodComboBox = new ComboBox<>();
+        methodComboBox.getItems().addAll("By Name", "By Phone", "By Inn");
+        methodComboBox.setValue("By Name");
+
         senderComboBox = new ComboBox<>();
         recipientComboBox = new ComboBox<>();
 
-
-        for (Client client : controller.getClients()) {
-            String name = client.getFirstName() + " " + client.getSecondName() + " " + client.getBankName();
-            senderComboBox.getItems().add(name);
-            recipientComboBox.getItems().add(name);
-        }
+        methodComboBox.setOnAction(event -> {
+            String selectedMethod = methodComboBox.getValue();
+            updateClientCombos(controller.getClients(), selectedMethod);
+        });
 
         Button transferButton = new Button("Transfer Money");
         transferButton.setOnAction(event -> {
-            String senderName = senderComboBox.getValue();
-            String recipientName = recipientComboBox.getValue();
-            String amountText = amountField.getText();
-            controller.handleTransfer(senderName, recipientName, amountText);
+            String sender = senderComboBox.getValue();
+            String recipient = recipientComboBox.getValue();
+            String amount = amountField.getText();
+            String method = methodComboBox.getValue();
+            controller.handleTransfer(method, sender, recipient, amount);
         });
 
-        transferPanel.getChildren().addAll(amountField, senderComboBox, recipientComboBox, transferButton);
+        transferPanel.getChildren().addAll(methodComboBox, amountField, senderComboBox, recipientComboBox, transferButton);
 
         Button showBanksInfoButton = new Button("Show Banks Info");
         showBanksInfoButton.setOnAction(event -> controller.handleShowBankInfo());
@@ -74,13 +78,29 @@ public class BankUI extends Application implements ViewInterface {
         infoButtonsPanel.getChildren().addAll(showBanksInfoButton, showClientsInfoButton);
 
         VBox root = new VBox(20);
-        root.getChildren().addAll( clientListPanel, transferPanel, infoButtonsPanel);
+        root.getChildren().addAll(clientListPanel, transferPanel, infoButtonsPanel);
 
         Scene scene = new Scene(root, 800, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
 
         refreshClientList(controller.getClients());
+    }
+
+    private void updateClientCombos(List<Client> clients, String method) {
+        senderComboBox.getItems().clear();
+        recipientComboBox.getItems().clear();
+
+        for (Client client : clients) {
+            String value = switch (method) {
+                case "By Name" -> client.getFirstName() + " " + client.getSecondName();
+                case "By Phone" -> client.getPhoneNumber();
+                case "By Inn" -> client.getInn();
+                default -> "";
+            };
+            senderComboBox.getItems().add(value);
+            recipientComboBox.getItems().add(value);
+        }
     }
 
     @Override
@@ -95,17 +115,11 @@ public class BankUI extends Application implements ViewInterface {
     @Override
     public void refreshClientList(List<Client> clients) {
         clientListItems.clear();
-        senderComboBox.getItems().clear();
-        recipientComboBox.getItems().clear();
-
         for (Client client : clients) {
-            String display = client.getFirstName() + " " + client.getSecondName() + ", "+ client.getBankName() +  " - " + client.getBalance();
+            String display = client.getFirstName() + " " + client.getSecondName() + ", " + client.getBankName() + " - " + client.getBalance();
             clientListItems.add(display);
-
-            String name = client.getFirstName() + " " + client.getSecondName();
-            senderComboBox.getItems().add(name);
-            recipientComboBox.getItems().add(name);
         }
+        updateClientCombos(clients, methodComboBox.getValue());
     }
 
     @Override
