@@ -2,6 +2,7 @@ package org.example.controller;
 
 import org.example.db.entity.Client;
 import org.example.db.repo.ClientRepository;
+import org.example.service.MoneyTransferService;
 import org.example.view.ViewInterface;
 import org.example.service.ClientService;
 import org.example.service.InfoService;
@@ -47,7 +48,7 @@ public class MainController {
             String senderBank = sender.getBankName();
             String recipientBank = recipient.getBankName();
 
-            MoneyTransferController.moneyTransfer(amount, sender, recipient);
+            MoneyTransferService.sendMoney(amount, sender, recipient);
 
             view.showTransferInfo(senderName, recipientName, amount, senderBank, recipientBank);
             view.refreshClientList(clients);
@@ -58,7 +59,6 @@ public class MainController {
             view.showError(e.getMessage());
         }
     }
-
 
     public void handleShowBankInfo() {
         infoService.showBanksInfo(view);
