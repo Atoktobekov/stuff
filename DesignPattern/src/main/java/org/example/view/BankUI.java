@@ -3,61 +3,71 @@ package org.example.view;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.example.controller.MainController;
 import org.example.db.entity.Client;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 public class BankUI extends Application implements ViewInterface {
 
+    private MainController controller;
     private ObservableList<String> clientListItems;
-    private ListView<String> clientListView;
+    private ComboBox<String> methodComboBox;
     private ComboBox<String> senderComboBox;
     private ComboBox<String> recipientComboBox;
-    private ComboBox<String> methodComboBox;
     private TextField amountField;
-    private MainController controller;
+    private TextArea infoTextArea;
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Bank System");
-
         controller = new MainController(this);
+        TabPane tabPane = new TabPane();
 
-        VBox clientListPanel = new VBox(10);
-        clientListPanel.setStyle("-fx-padding: 10;");
-        clientListPanel.getChildren().add(new Label("Client List"));
+        Tab clientTab = new Tab("Clients and Transfers");
+        clientTab.setContent(createClientTab());
+        clientTab.setClosable(false);
 
+        Tab infoTab = new Tab("Info Viewer");
+        infoTab.setContent(createInfoTab());
+        infoTab.setClosable(false);
+
+        tabPane.getTabs().addAll(clientTab, infoTab);
+
+        Scene scene = new Scene(tabPane, 800, 600);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Bank Application");
+        primaryStage.show();
+
+        refreshClientList(controller.getClients());
+    }
+
+    private VBox createClientTab() {
+        VBox layout = new VBox(10);
+        layout.setPadding(new Insets(10));
+
+        // Client list
         clientListItems = FXCollections.observableArrayList();
-        clientListView = new ListView<>(clientListItems);
-        clientListPanel.getChildren().add(clientListView);
+        ListView<String> clientListView = new ListView<>(clientListItems);
 
-        VBox transferPanel = new VBox(10);
-        transferPanel.setStyle("-fx-padding: 10;");
-        transferPanel.getChildren().add(new Label("Money Transfer"));
-
-        amountField = new TextField();
-        amountField.setPromptText("Amount to transfer");
-
+        // Transfer section
         methodComboBox = new ComboBox<>();
         methodComboBox.getItems().addAll("By Name", "By Phone", "By Inn");
-        methodComboBox.setValue("By Name");
+        methodComboBox.getSelectionModel().selectFirst();
+        methodComboBox.setOnAction(event -> refreshClientList(controller.getClients()));
 
         senderComboBox = new ComboBox<>();
         recipientComboBox = new ComboBox<>();
 
-        methodComboBox.setOnAction(event -> {
-            String selectedMethod = methodComboBox.getValue();
-            updateClientCombos(controller.getClients(), selectedMethod);
-        });
+        amountField = new TextField();
+        amountField.setPromptText("Amount");
 
         Button transferButton = new Button("Transfer Money");
-        transferButton.setOnAction(event -> {
+        transferButton.setOnAction(e -> {
             String sender = senderComboBox.getValue();
             String recipient = recipientComboBox.getValue();
             String amount = amountField.getText();
@@ -65,42 +75,36 @@ public class BankUI extends Application implements ViewInterface {
             controller.handleTransfer(method, sender, recipient, amount);
         });
 
-        transferPanel.getChildren().addAll(methodComboBox, amountField, senderComboBox, recipientComboBox, transferButton);
+        layout.getChildren().addAll(new Label("Clients List:"), clientListView,
+                new Label("Transfer Method:"), methodComboBox,
+                new Label("Sender:"), senderComboBox,
+                new Label("Recipient:"), recipientComboBox,
+                new Label("Amount:"), amountField,
+                transferButton);
 
-        Button showBanksInfoButton = new Button("Show Banks Info");
-        showBanksInfoButton.setOnAction(event -> controller.handleShowBankInfo());
-
-        Button showClientsInfoButton = new Button("Show Clients Info");
-        showClientsInfoButton.setOnAction(event -> controller.handleShowClientsInfo());
-
-        VBox infoButtonsPanel = new VBox(10);
-        infoButtonsPanel.setStyle("-fx-padding: 10;");
-        infoButtonsPanel.getChildren().addAll(showBanksInfoButton, showClientsInfoButton);
-
-        VBox root = new VBox(20);
-        root.getChildren().addAll(clientListPanel, transferPanel, infoButtonsPanel);
-
-        Scene scene = new Scene(root, 800, 600);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-
-        refreshClientList(controller.getClients());
+        return layout;
     }
 
-    private void updateClientCombos(List<Client> clients, String method) {
-        senderComboBox.getItems().clear();
-        recipientComboBox.getItems().clear();
+    private VBox createInfoTab() {
+        VBox layout = new VBox(10);
+        layout.setPadding(new Insets(10));
 
-        for (Client client : clients) {
-            String value = switch (method) {
-                case "By Name" -> client.getFirstName() + " " + client.getSecondName();
-                case "By Phone" -> client.getPhoneNumber();
-                case "By Inn" -> client.getInn();
-                default -> "";
-            };
-            senderComboBox.getItems().add(value);
-            recipientComboBox.getItems().add(value);
-        }
+        infoTextArea = new TextArea();
+        infoTextArea.setEditable(false);
+        infoTextArea.setWrapText(true);
+
+        Button showClientsButton = new Button("Show Clients Info");
+        showClientsButton.setOnAction(e -> controller.handleShowClientsInfo());
+
+        Button showBanksButton = new Button("Show Banks Info");
+        showBanksButton.setOnAction(e -> controller.handleShowBankInfo());
+
+        HBox buttons = new HBox(10, showClientsButton, showBanksButton);
+
+        layout.getChildren().addAll(infoTextArea, buttons);
+        VBox.setVgrow(infoTextArea, Priority.ALWAYS);
+
+        return layout;
     }
 
     @Override
@@ -113,36 +117,44 @@ public class BankUI extends Application implements ViewInterface {
     }
 
     @Override
-    public void refreshClientList(List<Client> clients) {
+    public void refreshClientList(java.util.List<Client> clients) {
         clientListItems.clear();
+        senderComboBox.getItems().clear();
+        recipientComboBox.getItems().clear();
+
+        String method = methodComboBox.getValue();
+
         for (Client client : clients) {
-            String display = client.getFirstName() + " " + client.getSecondName() + ", " + client.getBankName() + " - " + client.getBalance();
-            clientListItems.add(display);
+            String fullInfo = client.getFirstName() + " " + client.getSecondName() + ", " + client.getPhoneNumber() + ", " + client.getInn() + " - " + client.getBalance();
+            clientListItems.add(fullInfo);
+
+            String display;
+            switch (method) {
+                case "By Phone":
+                    display = client.getPhoneNumber(); break;
+                case "By INN":
+                    display = client.getInn(); break;
+                default:
+                    display = client.getFirstName() + " " + client.getSecondName();
+            }
+            senderComboBox.getItems().add(display);
+            recipientComboBox.getItems().add(display);
         }
-        updateClientCombos(clients, methodComboBox.getValue());
     }
 
     @Override
     public void showTransferInfo(String senderName, String recipientName, BigDecimal amount, String senderBank, String recipientBank) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Transfer Information");
+        alert.setTitle("Transfer Info");
         alert.setHeaderText(null);
-        alert.setContentText("Transfer Details:\n" +
-                "Sender: " + senderName + "\n" +
-                "Sender's Bank: " + senderBank + "\n" +
-                "Recipient: " + recipientName + "\n" +
-                "Recipient's Bank: " + recipientBank + "\n" +
-                "Amount: " + amount);
+        alert.setContentText("Transferred " + amount + " from " + senderName + " to " + recipientName +
+                "\nSender Bank: " + senderBank + "\nRecipient Bank: " + recipientBank);
         alert.showAndWait();
     }
 
     @Override
     public void showInfoDialog(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+        infoTextArea.setText(content);
     }
 
     public static void main(String[] args) {
