@@ -22,10 +22,10 @@ public class MainController {
 
     public MainController(ViewInterface view) {
         this.view = view;
-        this.clientRepository = new ClientRepository(); // если он нестатичный
+        this.clientRepository = new ClientRepository();
         this.clients = clientRepository.readClientsList();
         this.infoService = new InfoService(clients);
-        // Регистрация стратегий
+
         strategyMap = Map.of(
                 "By Name", new ByFullNameFinder(),
                 "By Phone", new ByPhoneFinder(),
@@ -54,8 +54,10 @@ public class MainController {
 
             Client sender = strategy.findClient(clients, senderId);
             Client recipient = strategy.findClient(clients, recipientId);
+            String SenderName = sender.getFirstName() + " " +  sender.getSecondName();
+            String RecipientName = recipient.getFirstName() + " " + recipient.getSecondName();
 
-            view.showTransferInfo(senderId, recipientId, amount, sender.getBankName(), recipient.getBankName());
+            view.showTransferInfo(SenderName, RecipientName, amount, sender.getBankName(), recipient.getBankName());
             view.refreshClientList(clients);
 
         } catch (NumberFormatException e) {

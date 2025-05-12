@@ -1,0 +1,49 @@
+{
+  "arrivedDateTime": "2025-05-12T14:30:00",
+  "departureAirport": "JFK",
+  "destinationAirport": "LAX",
+  "sections": [
+    {
+      "sectionName": "Business Class",
+      "maxPassengersNumber": 2,
+      "passengers": [
+        {
+          "name": "Alice Smith",
+          "nationality": "USA",
+          "gender": "Female",
+          "age": 34
+        },
+        {
+          "name": "John Doe",
+          "nationality": "Canada",
+          "gender": "Male",
+          "age": 45
+        }
+      ]
+    },
+    {
+      "sectionName": "Economy Class",
+      "maxPassengersNumber": 3,
+      "passengers": [
+        {
+          "name": "Maria Garcia",
+          "nationality": "Mexico",
+          "gender": "Female",
+          "age": 28
+        },
+        {
+          "name": "Ahmed Khan",
+          "nationality": "Pakistan",
+          "gender": "Male",
+          "age": 39
+        },
+        {
+          "name": "Lina Zhang",
+          "nationality": "China",
+          "gender": "Female",
+          "age": 22
+        }
+      ]
+    }
+  ]
+}
