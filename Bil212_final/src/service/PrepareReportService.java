@@ -2,19 +2,19 @@ package service;
 
 import dto.PassengerDTO;
 import dto.PlaneDTO;
+import repository.IPassengerReportSaver;
 import dto.SectionDTO;
 import repository.PassengerRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class PrepareReportService {
-    private final PassengerRepository passengerRepository;
+public class PrepareReportService implements IPrepareReportService {
+    private final IPassengerReportSaver passengerRepository;
 
-    public PrepareReportService(PassengerRepository passengerRepository) {
+    public PrepareReportService(IPassengerReportSaver passengerRepository) {
         this.passengerRepository = passengerRepository;
     }
-
     public void prepareReport(PlaneDTO planeInfo, String groupBy) {
         List<PassengerDTO> allPassengers = planeInfo.getSections().stream()
                 .flatMap(section -> section.getPassengers().stream())

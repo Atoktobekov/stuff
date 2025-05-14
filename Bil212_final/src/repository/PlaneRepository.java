@@ -7,7 +7,7 @@ import dto.PlaneDTO;
 import java.io.File;
 import java.io.IOException;
 
-public class PlaneRepository {
+public class PlaneRepository implements IPlaneRepository {
     public PlaneDTO readPlaneInfo(String filename) {
         try {
             ObjectMapper mapper = new ObjectMapper();

@@ -1,12 +1,12 @@
 package controller;
 
 import dto.PlaneDTO;
-import service.ParsePlaneInfoJsonService;
+import service.IParsePlaneInfoJsonService;
 
 public class GetPlaneInfoController {
-    private final ParsePlaneInfoJsonService parseService;
+    private final IParsePlaneInfoJsonService parseService;
 
-    public GetPlaneInfoController(ParsePlaneInfoJsonService parseService) {
+    public GetPlaneInfoController(IParsePlaneInfoJsonService parseService) {
         this.parseService = parseService;
     }
 
@@ -14,3 +14,4 @@ public class GetPlaneInfoController {
         return parseService.parsePlaneInfo(filename);
     }
 }
+

@@ -11,7 +11,7 @@
           "name": "Nurzhan Tursunov",
           "nationality": "Kazakhstan",
           "gender": "Male",
-          "age": 55
+          "age": 43
         }
       ]
     },
@@ -23,13 +23,13 @@
           "name": "Zarina Karimova",
           "nationality": "Uzbekistan",
           "gender": "Female",
-          "age": 30
+          "age": 33
         },
         {
           "name": "Tamerlan Bekov",
           "nationality": "Kyrgyzstan",
           "gender": "Male",
-          "age": 40
+          "age": 30
         }
       ]
     },
@@ -41,19 +41,19 @@
           "name": "Ainura Toktosunova",
           "nationality": "Kyrgyzstan",
           "gender": "Female",
-          "age": 25
+          "age": 35
         },
         {
           "name": "Rustam Zokirov",
           "nationality": "Uzbekistan",
           "gender": "Male",
-          "age": 33
+          "age": 22
         },
         {
           "name": "Dilbar Mamatova",
           "nationality": "Kyrgyzstan",
           "gender": "Female",
-          "age": 29
+          "age": 21
         }
       ]
     }

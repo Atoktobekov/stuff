@@ -1,25 +1,14 @@
-Canada
-● John Doe / Male / 45 жашта
-
-орточо жашы 45,00
-______________________________________
-USA
-● Alice Smith / Female / 34 жашта
-
-орточо жашы 34,00
-______________________________________
-Pakistan
-● Ahmed Khan / Male / 39 жашта
-
-орточо жашы 39,00
-______________________________________
-China
-● Lina Zhang / Female / 22 жашта
-
-орточо жашы 22,00
-______________________________________
-Mexico
-● Maria Garcia / Female / 28 жашта
+Female
+● Zarina Karimova / Uzbekistan / 30 жашта
+● Ainura Toktosunova / Kyrgyzstan / 25 жашта
+● Dilbar Mamatova / Kyrgyzstan / 29 жашта
 
 орточо жашы 28,00
+______________________________________
+Male
+● Nurzhan Tursunov / Kazakhstan / 55 жашта
+● Tamerlan Bekov / Kyrgyzstan / 40 жашта
+● Rustam Zokirov / Uzbekistan / 33 жашта
+
+орточо жашы 42,67
 ______________________________________

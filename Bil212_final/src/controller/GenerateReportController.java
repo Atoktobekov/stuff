@@ -1,12 +1,12 @@
 package controller;
 
 import dto.PlaneDTO;
-import service.PrepareReportService;
+import service.IPrepareReportService;
 
 public class GenerateReportController {
-    private final PrepareReportService reportService;
+    private final IPrepareReportService reportService;
 
-    public GenerateReportController(PrepareReportService reportService) {
+    public GenerateReportController(IPrepareReportService reportService) {
         this.reportService = reportService;
     }
 
@@ -14,3 +14,4 @@ public class GenerateReportController {
         reportService.prepareReport(planeDTO, groupBy);
     }
 }
+

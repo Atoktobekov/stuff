@@ -1,12 +1,12 @@
 package service;
 
 import dto.PlaneDTO;
-import repository.PlaneRepository;
+import repository.IPlaneRepository;
 
-public class ParsePlaneInfoJsonService {
-    private final PlaneRepository planeRepository;
+public class ParsePlaneInfoJsonService implements IParsePlaneInfoJsonService {
+    private final IPlaneRepository planeRepository;
 
-    public ParsePlaneInfoJsonService(PlaneRepository planeRepository) {
+    public ParsePlaneInfoJsonService(IPlaneRepository planeRepository) {
         this.planeRepository = planeRepository;
     }
 

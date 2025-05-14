@@ -62,7 +62,7 @@ public class FinalSinavView extends JFrame {
 
         // 🔹 Bottom Panel (Theory answer area)
         theoryTextArea = new JTextArea(10, 50);
-        theoryTextArea.setText("Теориялык суроо: \nOpen/Close принципке мисал бул программада -\nСервис жана контроллер класстары жаңы функция кошкондо өзгөртүлбөстөн кеңейтиле алат.");
+        theoryTextArea.setText("Теориялык суроо: \n\"Open/Close\" принциби проектте IPrepareReportService, IParsePlaneInfoJsonService\n интерфейстеринин жардамы менен жана аларга байланган GetPlaneInfoController, \nGenerateReportController класстары менен ишке ашырылган. \nРепозиторий класстары да IPlaneRepository, IPassengerReportSaver интерфейстери \nаркылуу ишке ашырылган.\n");
         JScrollPane scrollPane = new JScrollPane(theoryTextArea);
 
         add(scrollPane, BorderLayout.SOUTH);
